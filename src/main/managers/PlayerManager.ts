@@ -39,6 +39,18 @@ export class PlayerManager {
     this.port = port;
 
     this.fastify = Fastify();
+    this.fastify.addHook('preHandler', (req, res, done) => {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Methods", "*");
+      res.header("Access-Control-Allow-Headers",  "*");
+      
+      const isPreflight = /options/i.test(req.method);
+      if (isPreflight) {
+        return res.send();
+      }
+          
+      done();
+    })
 
     registerRemote(this);
 
