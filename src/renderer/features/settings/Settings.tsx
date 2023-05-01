@@ -270,6 +270,13 @@ export function Settings({ open, onClose }: SettingsProps) {
     dispatch(setMultipleOutputsEnabled(!settings.multipleOutputsEnabled));
   }
 
+  const [clearingCache, setClearingCache] = useState(false);
+  async function handleCacheClear() {
+    setClearingCache(true);
+    await window.kenku.clearCache();
+    setClearingCache(false);
+  }
+
   const otherSettings = (
     <Stack spacing={1}>
       <FormGroup>
@@ -328,6 +335,14 @@ export function Settings({ open, onClose }: SettingsProps) {
           }
         />
       </FormGroup>
+      <Button
+        onClick={handleCacheClear}
+        fullWidth
+        variant="outlined"
+        size="small"
+      >
+        {clearingCache ? <CircularProgress size={24} /> : "Clear Cache"}
+      </Button>
     </Stack>
   );
 
